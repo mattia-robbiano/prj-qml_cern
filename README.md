@@ -1,1 +1,1 @@
-# born_machine
+Collecting coding tests and experiments from my thesis work.
