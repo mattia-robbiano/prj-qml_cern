@@ -1,6 +1,7 @@
 {
-    "MODE": "TEST",
-    "NOISY": false,
+    "TRAINING_MODE": "LOAD",
+    "OUTPUT_MODE": "COMPRESSED",
     "DEPTH": 10,
-    "ITERATIONS": 500
+    "ITERATIONS": 1000
 }
+
