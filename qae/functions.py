@@ -201,11 +201,6 @@ def LatentAE_Builder(num_latent, num_trash, depth):
     LatentCircuit.reset(3)
     LatentCircuit.barrier()
 
-    #draw circuit and save it
-    LatentCircuit.draw('mpl')
-    plt.savefig('LatentCircuit.png')
-    plt.show
-    
     return LatentCircuit
 
 def Decoder_Builder(num_latent, num_trash, depth):
