@@ -16,11 +16,11 @@ from functions import *
 # TRAINING_MODE: - "TRAIN" for training the model, new parameters will be saved in ./OPTIMIZATION/parameters.json
 #                - "TEST" for loading the model, parameters will be loaded from ./OPTIMIZATION/parameters.json
 # OUTPUT_MODE:   - "FULL" input images will be passed through the full autoencoder and reconstructed images 
-#                   will be saved in ./DATA/ 
+#                   will be saved in ./output_data/ 
 #                - "COMPRESSED" input images will be passed through the encoder and output statevectors
-#                   will be saved in ./DATA/
+#                   will be saved in ./output_data/
 #                - "COMPRESSED-check" input images will be passed through the encoder and output statevectors 
-#                   will be passed through the decoder. The output statevectors will be saved in ./DATA/
+#                   will be passed through the decoder. The output statevectors will be saved in ./output_data/
 # DEPTH:         - Depth of the ansatz circuit
 # ITERATIONS:    - Number of iterations for the optimization algorithm
 # SAMPLES_NUM:   - Number of samples produced
@@ -83,14 +83,14 @@ if OUTPUT_MODE == "COMPRESSED" or OUTPUT_MODE == "COMPRESSED-check":
             ax1.set_title("Input Data")
             ax2.imshow(output_sv)
             ax2.set_title("Output Data")
-            plt.savefig(f'./DATA/{1-i}_image.png')
-            print(f'Image saved to file: ./DATA/{1-i}_image.png')
+            plt.savefig(f'./output_data/{1-i}_image.png')
+            print(f'Image saved to file: ./output_data/{1-i}_image.png')
 
             # Saving data
-            np.savetxt(f'./DATA/{1-i}_input.txt', image.reshape(8, 4), fmt='%f')
-            np.savetxt(f'./DATA/{1-i}_output.txt', output_sv, fmt='%f')
-            print(f'Data saved to file: ./DATA/{1-i}_output.txt')
-            print(f'Data saved to file: ./DATA/{1-i}_input.txt')
+            np.savetxt(f'./output_data/{1-i}_input.txt', image.reshape(8, 4), fmt='%f')
+            np.savetxt(f'./output_data/{1-i}_output.txt', output_sv, fmt='%f')
+            print(f'Data saved to file: ./output_data/{1-i}_output.txt')
+            print(f'Data saved to file: ./output_data/{1-i}_input.txt')
         
         else:
             # Save the statevector
@@ -102,18 +102,18 @@ if OUTPUT_MODE == "COMPRESSED" or OUTPUT_MODE == "COMPRESSED-check":
         i += 1
 
     # Save statevectors to files
-    with open('./DATA/digit_one_statevectors.txt', 'w') as f:
+    with open('./output_data/digit_one_statevectors.txt', 'w') as f:
         for sv in digit_one_statevectors:
             np.savetxt(f, sv, fmt='%f')
             f.write('\n')
 
-    with open('./DATA/digit_zero_statevectors.txt', 'w') as f:
+    with open('./output_data/digit_zero_statevectors.txt', 'w') as f:
         for sv in digit_zero_statevectors:
             np.savetxt(f, sv, fmt='%f')
             f.write('\n')
 
-    print(f'Data saved to file: ./DATA/digit_one_statevectors.txt')
-    print(f'Data saved to file: ./DATA/digit_zero_statevectors.txt')
+    print(f'Data saved to file: ./output_data/digit_one_statevectors.txt')
+    print(f'Data saved to file: ./output_data/digit_zero_statevectors.txt')
 
 if OUTPUT_MODE == "FULL":
     FullAutoEncoder = FullAE_Builder(num_latent, num_trash, depth)
@@ -136,13 +136,13 @@ if OUTPUT_MODE == "FULL":
         ax1.set_title("Input Data")
         ax2.imshow(output_sv)
         ax2.set_title("Output Data")
-        plt.savefig(f'./DATA/{1-i}_image.png')
-        print(f'Image saved to file: ./DATA/{1-i}_image.png')
+        plt.savefig(f'./output_data/{1-i}_image.png')
+        print(f'Image saved to file: ./output_data/{1-i}_image.png')
 
         # Saving data
-        np.savetxt(f'./DATA/{1-i}_input.txt', image.reshape(8, 4), fmt='%f')
-        np.savetxt(f'./DATA/{1-i}_output.txt', output_sv, fmt='%f')
-        print(f'Data saved to file: ./DATA/{1-i}_output.txt')
-        print(f'Data saved to file: ./DATA/{1-i}_input.txt')
+        np.savetxt(f'./output_data/{1-i}_input.txt', image.reshape(8, 4), fmt='%f')
+        np.savetxt(f'./output_data/{1-i}_output.txt', output_sv, fmt='%f')
+        print(f'Data saved to file: ./output_data/{1-i}_output.txt')
+        print(f'Data saved to file: ./output_data/{1-i}_input.txt')
 
         i += 1
