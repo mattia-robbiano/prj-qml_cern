@@ -217,12 +217,22 @@ def options_setup(PATH):
     ITERATIONS = int(namelist["ITERATIONS"])
     TRAINING_MODE = str(namelist["TRAINING_MODE"])
     OUTPUT_MODE = str(namelist["OUTPUT_MODE"])
+    SAMPLES_NUM = int(namelist["SAMPLES_NUM"])
     num_latent = 3
     num_trash = 2
 
     print("Training mode:", TRAINING_MODE)
     print("Output mode:", OUTPUT_MODE)
     print()
+
+    if OUTPUT_MODE == "COMPRESSED-check" and SAMPLES_NUM != 2:
+        warnings.warn("For the COMPRESSED-check output mode, the number of samples must be 2. Changing to 2.")
+        SAMPLES_NUM
+
+    if OUTPUT_MODE == "FULL" and SAMPLES_NUM != 2:
+        warnings.warn("For the FULL output mode, the number of samples must be 2. Changing to 2.")
+        SAMPLES_NUM
+
 
     if TRAINING_MODE == "TRAIN":
         print("Depth:", depth)
@@ -235,5 +245,5 @@ def options_setup(PATH):
             print("Starting...")
             print()
             
-    return depth, ITERATIONS, TRAINING_MODE, OUTPUT_MODE, num_latent, num_trash
+    return depth, ITERATIONS, TRAINING_MODE, OUTPUT_MODE, num_latent, num_trash, SAMPLES_NUM
 

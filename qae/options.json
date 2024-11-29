@@ -2,6 +2,7 @@
     "TRAINING_MODE": "LOAD",
     "OUTPUT_MODE": "COMPRESSED",
     "DEPTH": 10,
-    "ITERATIONS": 1000
+    "ITERATIONS": 1000,
+    "SAMPLES_NUM": 10
 }
 

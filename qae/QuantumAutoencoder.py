@@ -23,6 +23,7 @@ from functions import *
 #                   will be passed through the decoder. The output statevectors will be saved in ./DATA/
 # DEPTH:         - Depth of the ansatz circuit
 # ITERATIONS:    - Number of iterations for the optimization algorithm
+# SAMPLES_NUM:   - Number of samples produced
 
 # num_latent:    - Number of latent qubits not tunable yet
 # num_trash:     - Number of trash qubits not tunable yet
@@ -31,7 +32,7 @@ from functions import *
 #Loading options and parameters
 options_FILEPATH = "./options.json"
 
-depth, ITERATIONS, TRAINING_MODE, OUTPUT_MODE, num_latent, num_trash = options_setup(options_FILEPATH)
+depth, ITERATIONS, TRAINING_MODE, OUTPUT_MODE, num_latent, num_trash, SAMPLES_NUM = options_setup(options_FILEPATH)
 
 # Training (if needed)
 if TRAINING_MODE == "TRAIN":
@@ -46,7 +47,10 @@ print()
 if OUTPUT_MODE == "COMPRESSED" or OUTPUT_MODE == "COMPRESSED-check":
     LatentCircuit = LatentAE_Builder(num_latent, num_trash, depth)
     Decoder = Decoder_Builder(num_latent, num_trash, depth)
-    test_images, test_labels = GetDatasetDigits(2, draw=False)
+    test_images, test_labels = GetDatasetDigits(SAMPLES_NUM, draw=False)
+
+    digit_one_statevectors = []
+    digit_zero_statevectors = []
 
     i = 0
     for image, label in zip(test_images, test_labels):
@@ -71,6 +75,7 @@ if OUTPUT_MODE == "COMPRESSED" or OUTPUT_MODE == "COMPRESSED-check":
 
             output_sv = np.reshape(np.abs(output_sv) ** 2, (8, 4))
             output_sv = output_sv / np.linalg.norm(output_sv)
+            output_sv = output_sv[:10]
 
             # Figure generation
             fig, (ax1, ax2) = plt.subplots(1, 2)
@@ -89,11 +94,26 @@ if OUTPUT_MODE == "COMPRESSED" or OUTPUT_MODE == "COMPRESSED-check":
         
         else:
             # Save the statevector
-            output_sv_partial = output_sv_partial / np.linalg.norm(output_sv_partial)
-            np.savetxt(f'./DATA/{1-i}_output.txt', output_sv_partial, fmt='%f')
-            print(f'Data saved to file: ./DATA/{1-i}_output.txt')
+            if label == 1:
+                digit_one_statevectors.append(output_sv_partial)
+            else:
+                digit_zero_statevectors.append(output_sv_partial)
 
         i += 1
+
+    # Save statevectors to files
+    with open('./DATA/digit_one_statevectors.txt', 'w') as f:
+        for sv in digit_one_statevectors:
+            np.savetxt(f, sv, fmt='%f')
+            f.write('\n')
+
+    with open('./DATA/digit_zero_statevectors.txt', 'w') as f:
+        for sv in digit_zero_statevectors:
+            np.savetxt(f, sv, fmt='%f')
+            f.write('\n')
+
+    print(f'Data saved to file: ./DATA/digit_one_statevectors.txt')
+    print(f'Data saved to file: ./DATA/digit_zero_statevectors.txt')
 
 if OUTPUT_MODE == "FULL":
     FullAutoEncoder = FullAE_Builder(num_latent, num_trash, depth)
